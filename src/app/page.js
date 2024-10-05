@@ -1,101 +1,73 @@
-import Image from "next/image";
+import React from 'react';
 
-export default function Home() {
+const LandingPage = () => {
+  const topics = [
+    { name: 'DEPRESSION', link: '/depression' }, 
+    { name: 'ANXIETY', link: '/anxiety' },
+    { name: 'BIPOLAR', link: '/bipolar' },
+    { name: 'LONELINESS', link: '/loneliness' },
+    { name: 'SOLITUDE', link: '/solitude' },
+    { name: 'SAFE SPACE', link: '/safe-space' }
+  ];
+
+  const partners = [
+    'SafeHaven', 'Solace', 'MHI', 'Nature of Health'
+  ];
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat pt-14" style={{ backgroundImage: `url('/vecteezy_blue-vector-grunge-background_107486.jpg')` }}>
+      <header className="w-9/12 bg-white p-4 flex justify-between items-center mx-auto">
+        <div className="flex items-center">
+          <img src="/logo.png" alt="Logo" className="w-5 h-5" />
+        </div>
+        <nav className="flex items-center space-x-4">
+          <a href="#" className="text-sm font-semibold">JOIN COMMUNITY</a>
+          <a href="#" className="text-sm font-semibold">LOGIN</a>
+          <a href="#" className="text-sm font-semibold">SELF CHECK</a>
+        </nav>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-3 gap-8 justify-items-center items-center">
+          {topics.map((topic, index) => (
+            <a
+              key={index}
+              href={topic.link} // Link to the specified route
+              className="bg-white w-72 h-96 flex items-center justify-center text-center border-[15px] border-black"
+            >
+              <span className="text-2xl font-bold">{topic.name}</span>
+            </a>
+          ))}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer>
+        <div className="bg-black text-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-4 gap-4">
+              {partners.map((partner, index) => (
+                <div key={index} className="text-center">
+                  <div className="w-8 h-8 bg-gray-300 mx-auto mb-2"></div>
+                  <h3 className="font-semibold mb-2">{partner}</h3>
+                  <p className="text-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="bg-teal-500 py-4">
+          <div className="container mx-auto px-4 flex justify-between items-center">
+            <div className="w-8 h-8 bg-gray-300"></div>
+            <div className="flex space-x-4">
+              <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+              <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+              <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
-}
+};
+
+export default LandingPage;
