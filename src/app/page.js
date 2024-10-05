@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const LandingPage = () => {
   const topics = [
@@ -11,7 +12,9 @@ const LandingPage = () => {
   ];
 
   const partners = [
-    'SafeHaven', 'Solace', 'MHI', 'Nature of Health'
+    { name: 'Ikizere', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { name: 'RBC', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { name: 'Ministry of Health', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
   ];
 
   return (
@@ -32,7 +35,7 @@ const LandingPage = () => {
           {topics.map((topic, index) => (
             <a
               key={index}
-              href={topic.link} // Link to the specified route
+              href={topic.link} 
               className="bg-white w-72 h-96 flex items-center justify-center text-center border-[15px] border-black"
             >
               <span className="text-2xl font-bold">{topic.name}</span>
@@ -42,27 +45,48 @@ const LandingPage = () => {
       </main>
 
       <footer>
-        <div className="bg-black text-white py-8">
+        <div className="bg-black text-white py-12 min-h-[400px]">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-4 gap-4">
+            <h2 className="text-center text-2xl font-bold mb-12 text-purple-400">Partners</h2>
+            <div className="grid grid-cols-4 gap-8">
+              <div className="text-center">
+                <img src="/smile.png" alt="Placeholder" className="w-8 h-8 mx-auto mb-4" />
+                <h3 className="font-bold mb-2 text-white">Solid Minds</h3>
+                <p className="text-sm text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
               {partners.map((partner, index) => (
                 <div key={index} className="text-center">
-                  <div className="w-8 h-8 bg-gray-300 mx-auto mb-2"></div>
-                  <h3 className="font-semibold mb-2">{partner}</h3>
-                  <p className="text-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  <img src="/smile.png" alt="Smile" className="w-8 h-8 mx-auto mb-4" />
+                  <h3 className="font-bold mb-2 text-white">{partner.name}</h3>
+                  <p className="text-sm text-white">{partner.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-        <div className="bg-teal-500 py-4">
+
+        <div className="bg-[#4AA9AD] py-8"> 
           <div className="container mx-auto px-4 flex justify-between items-center">
-            <div className="w-8 h-8 bg-gray-300"></div>
-            <div className="flex space-x-4">
-              <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
-              <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
-              <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+    
+            <div className="text-center">
+              <img src="/smile2.png" alt="Smile" className="w-7 h-7 mx-auto" />
             </div>
+
+            <div className="flex space-x-6">
+              <a href="https://facebook.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+                <FaFacebookF size={20} />
+              </a>
+              <a href="https://twitter.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+                <FaTwitter size={20} />
+              </a>
+              <a href="https://instagram.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+                <FaInstagram size={20} /> 
+              </a>
+            </div>
+          </div>
+
+          <div className="text-center text-white text-xs mt-10">
+            © Copyright Year
           </div>
         </div>
       </footer>
