@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import Link from 'next/link';
 
 const Footer = () => {
     const partners = [
@@ -37,15 +38,15 @@ const Footer = () => {
             </div>
 
             <div className="flex space-x-6">
-              <a href="https://facebook.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+              <Link href="https://facebook.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
                 <FaFacebookF size={20} />
-              </a>
-              <a href="https://twitter.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+              </Link>
+              <Link href="https://twitter.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
                 <FaTwitter size={20} />
-              </a>
-              <a href="https://instagram.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+              </Link>
+              <Link href="https://instagram.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
                 <FaInstagram size={20} /> 
-              </a>
+              </Link>
             </div>
           </div>
 
