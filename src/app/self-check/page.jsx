@@ -5,11 +5,6 @@ import Link from 'next/link';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Page = () => {
-    const partners = [
-        { name: 'Ikizere', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { name: 'RBC', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { name: 'Ministry of Health', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
-    ];
 
     return (
         <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col pt-14" style={{ backgroundImage: `url('/vecteezy_blue-vector-grunge-background_107486.jpg')` }}>
@@ -30,9 +25,12 @@ const Page = () => {
                             </div>
 
                             {/* Separated button */}
+                            <Link href='/self-check-form'>
                             <button className="w-full bg-white text-black py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300">
                                 Take a check
                             </button>
+                            </Link>
+                            
                         </div>
                     </div>
                 </div>
