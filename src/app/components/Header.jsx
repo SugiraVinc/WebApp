@@ -10,7 +10,7 @@ const Header = () => {
     <nav className="flex items-center space-x-4">
       <Link href="#" className="text-sm font-semibold">JOIN COMMUNITY</Link>
       <Link href="/login" className="text-sm font-semibold">LOGIN</Link>
-      <Link href="#" className="text-sm font-semibold">SELF CHECK</Link>
+      <Link href="/self-check" className="text-sm font-semibold">SELF CHECK</Link>
     </nav>
   </header>
   )

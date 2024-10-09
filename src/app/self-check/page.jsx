@@ -41,7 +41,7 @@ const Page = () => {
             <footer>
                 <div className="w-full">
                     {/* Player controls bar */}
-                    <div className="bg-[#8EC5C7] px-4 py-2 flex items-center justify-between">
+                    <div className="bg-[#4AA9AD] px-4 py-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <div className="w-6 h-6 bg-black rounded-full" />
                             <div className="text-white">
@@ -69,25 +69,25 @@ const Page = () => {
                             <img
                                 src="/FreshLink Logo OG 1.png"
                                 alt="Hope"
-                                className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-8 z-10"
+                                className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-14 mt-6 z-10"
                             />
 
                             {/* Left image */}
-                            <div className="border-[3px] border-black bg-white w-[30%]">
+                            <div className="border-[15px] border-black bg-white w-[30%]">
                                 <div className="p-2">
                                     <img src="/Poetherapy (1).png" alt="I will not take me away" className="w-full" />
                                 </div>
                             </div>
 
-                            {/* Middle image - wider */}
-                            <div className="border-[3px] border-black bg-white w-[35%]">
-                                <div className="pt-1 pb-1 px-2"> {/* Reduced top and bottom padding */}
-                                    <img src="/Lil Wayne (3).png" alt="HEAL" className="w-full" />
+                            {/* Middle image - adjusted to be only slightly smaller */}
+                            <div className="border-[15px] border-black bg-white w-[35%] ">
+                                <div className="p-1">
+                                    <img src="/Lil Wayne (3).png" alt="HEAL" className="w-full h-72 ml-1" />
                                 </div>
                             </div>
 
                             {/* Right image */}
-                            <div className="border-[3px] border-black bg-white w-[30%]">
+                            <div className="border-[15px] border-black bg-white w-[30%]">
                                 <div className="p-2">
                                     <img src="/Selena Gomez Quote 1.png" alt="Selena Gomez quote" className="w-full" />
                                 </div>
@@ -96,29 +96,30 @@ const Page = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#4AA9AD] py-8">
-                    <div className="container mx-auto px-4 flex justify-between items-center">
-                        <div className="text-center">
-                            <img src="/smile2.png" alt="Smile" className="w-7 h-7 mx-auto" />
-                        </div>
+                <div className="bg-[#4AA9AD] py-8"> 
+          <div className="container mx-auto px-4 flex justify-between items-center">
+    
+            <div className="text-center">
+              <img src="/smile2.png" alt="Smile" className="w-7 h-7 mx-auto" />
+            </div>
 
-                        <div className="flex space-x-6">
-                            <Link href="https://facebook.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
-                                <FaFacebookF size={20} />
-                            </Link>
-                            <Link href="https://twitter.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
-                                <FaTwitter size={20} />
-                            </Link>
-                            <Link href="https://instagram.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
-                                <FaInstagram size={20} />
-                            </Link>
-                        </div>
-                    </div>
+            <div className="flex space-x-6">
+              <Link href="https://facebook.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+                <FaFacebookF size={20} />
+              </Link>
+              <Link href="https://twitter.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+                <FaTwitter size={20} />
+              </Link>
+              <Link href="https://instagram.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
+                <FaInstagram size={20} /> 
+              </Link>
+            </div>
+          </div>
 
-                    <div className="text-center text-white text-xs mt-10">
-                        © Copyright Year
-                    </div>
-                </div>
+          <div className="text-center text-white text-xs mt-10">
+            © Copyright Year
+          </div>
+        </div>
             </footer>
         </div>
     )
