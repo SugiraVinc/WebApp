@@ -14,6 +14,7 @@ const Page = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isContributor, setIsContributor] = useState(false);
   
   const router = useRouter();
   const dispatch = useDispatch()
@@ -42,7 +43,7 @@ const Page = () => {
     }
 
     try {
-      const res = await register({ name, email, password }).unwrap();
+      const res = await register({ name, email, password, isContributor }).unwrap();
       if (res) {
         dispatch(setCredentials({...res}))
         toast.success('Registration successful', {
@@ -125,6 +126,16 @@ const Page = () => {
                     required
                     className="w-full py-3 px-2 focus:outline-none" 
                   />
+                </div>
+                <div className="flex items-center">
+                  <input 
+                    type="checkbox" 
+                    id="contributor" 
+                    checked={isContributor}
+                    onChange={(e) => setIsContributor(e.target.checked)}
+                    className="mr-2"
+                  />
+                  <label htmlFor="contributor" className="text-white">Register as Contributor</label>
                 </div>
                 <button 
                   type="submit" 
