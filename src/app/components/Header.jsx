@@ -54,6 +54,9 @@ const Header = () => {
           <Link href="/login" className="text-sm font-semibold">LOGIN</Link>
         )}
         <Link href="/self-check" className="text-sm font-semibold">SELF CHECK</Link>
+        {user && user.isContributor && (
+          <Link href="/contributor-dashboard" className="text-sm font-semibold">Dashboard</Link>
+        )}
       </nav>
     </header>
   );
