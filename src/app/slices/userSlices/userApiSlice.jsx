@@ -45,6 +45,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        createTest: builder.mutation({
+            query: (data) => ({
+                url:`/test/test`,
+                method: 'POST',
+                body: data
+            })
+        }),
+        getTest: builder.query({
+            query: () => ({
+                url:`/test/test`,
+                method: 'GET'
+            })
+        }),
     })
 })
 
@@ -54,5 +67,7 @@ export const {
     useLoginMutation, 
     useGoogleLoginMutation, 
     useEditUserMutation, 
-    useGoogleRegisterMutation
+    useGoogleRegisterMutation,
+    useCreateTestMutation,
+    useGetTestQuery
 } = userApiSlice

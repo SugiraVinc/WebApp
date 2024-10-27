@@ -25,7 +25,7 @@ const Page = () => {
                             </div>
 
                             {/* Separated button */}
-                            <Link href='/self-check-form'>
+                            <Link href='/self-check-depression-form'>
                             <button className="w-full bg-white text-black py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300">
                                 Take a check
                             </button>

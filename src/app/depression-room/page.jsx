@@ -1,9 +1,13 @@
+'use client'
 import React from 'react';
 import Header from '../components/Header';
 import Link from 'next/link';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
-const Page = () => {
+const Page = () => {    
+    const userInfo = localStorage.getItem('userInfo');
+
     return (
         <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col pt-14" style={{ backgroundImage: `url('/vecteezy_blue-vector-grunge-background_107486.jpg')` }}>
             <Header />
@@ -35,16 +39,24 @@ const Page = () => {
                                 </button>
                                
                                
-                               <button className="w-full bg-gray-200 text-black py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">
-                               <Link href='self-check'>
-                                    Depression Self-check
-                               </Link>
-                                </button>
-                                
+                                {userInfo ? (
+                                 <button className="w-full bg-gray-200 text-black py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">
+                                          <Link href='/self-check-depression'>
+                                              Depression Self-check
+                                          </Link>
+                                      </button>
+                                  ) : (
+                                      <button 
+                                          onClick={() => toast.error('Please login to access the Depression Self-check')}
+                                          className="w-full bg-gray-300 text-black py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300"
+                                      >
+                                          Depression Self-check
+                                      </button>
+                                  )}       
                             </div>
 
                             {/* Safe Space button */}
-                            <Link href='/self-check-form'>
+                            <Link href='/chat'>
                                 <button className="w-full mt-6 bg-white text-black py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300">
                                     Safe Space
                                 </button>
