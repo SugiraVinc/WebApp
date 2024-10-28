@@ -32,19 +32,19 @@ const Page = () => {
                                 </Link>
                                 </button>
                                 
-                                <button className="w-full bg-gray-200 text-black py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">
                                 <Link href='/gallery'>
+                                <button className="w-full mt-3 bg-gray-200 text-black py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">
                                     Creative Pieces
-                                </Link>
                                 </button>
+                                </Link>
                                
                                
                                 {userInfo ? (
-                                 <button className="w-full bg-gray-200 text-black py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">
                                           <Link href='/self-check-depression'>
+                                    <button className="w-full mt-3 bg-gray-200 text-black py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300">
                                               Depression Self-check
-                                          </Link>
                                       </button>
+                                          </Link>
                                   ) : (
                                       <button 
                                           onClick={() => toast.error('Please login to access the Depression Self-check')}

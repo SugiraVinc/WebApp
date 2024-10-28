@@ -1,63 +1,99 @@
 'use client'
-import React, { useState, useRef } from 'react';
-import Header from '../components/Header';
+import React, { useEffect, useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useRouter, useParams } from 'next/navigation';
+import { useGetNoteByIdQuery, useUpdateNoteMutation } from '@/app/slices/userSlices/userApiSlice';
+import toast from 'react-hot-toast';
 
-const DashboardHeader = () => {
+const NotesInterface = () => {
+  const router = useRouter();
+  const params = useParams();
+  const noteId = params.id;
+
+  const [formData, setFormData] = useState({
+    title: '',
+    content: ''
+  });
+
+  // Fetch note data
+  const { data: note, isLoading } = useGetNoteByIdQuery(noteId);
+
+  const [updateNote] = useUpdateNoteMutation();
+  useEffect(() => {
+    if (note) {
+      setFormData({
+        title: note.data.note.title,
+        content: note.data.note.content
+      });
+    }
+  }, [note]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await updateNote({
+        id: noteId,
+        ...formData
+      }).unwrap();
+      router.push('/diary'); 
+      toast.success('Edited successfully')
+    } catch (err) {
+      console.error('Failed to update note:', err);
+    }
+  };
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-black text-white p-4">Loading...</div>;
+  }
 
   return (
     <>
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat p-8 "
-         style={{ backgroundImage: `url('/vecteezy_blue-vector-grunge-background_107486.jpg')` }}>
-
-            <Header/>
-      <div className="mx-auto max-w-5xl rounded-lg bg-black/80 p-6 mt-10 h-[600px] flex flex-col justify-between">
-        {/* Top buttons */}
-        <div className="flex justify-between items-center">
-          <div className="relative">
-            <Link href='diary'>
+      <div className="min-h-screen bg-black text-white p-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-2">
+              <Link href="/diary">
+                <ArrowLeft className="w-6 h-6" />
+              </Link>
+              <span className="text-lg">Notes</span>
+            </div>
             <button 
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm group"
+              onClick={handleSubmit}
+              className="px-4 py-1 bg-gray-200 text-black rounded hover:bg-gray-300"
             >
-              <span>My Diary</span>
-            </button>
-            </Link>
-          </div>
-
-          <div className="relative">
-            <Link href='results'>
-            
-            <button 
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm"
-            >
-              My progress
-            </button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Bottom buttons */}
-        <div className="flex justify-between items-center">
-          <div className="relative">
-            <button 
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm"
-            >
-              Delete My Account
+              Save
             </button>
           </div>
 
-          <div className="relative">
-            <button 
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm"
-            >
-              Contribute
-            </button>
+          <div className="mb-4">
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Note Title"
+              className="bg-transparent text-2xl font-semibold w-full outline-none"
+            />
           </div>
+
+          <textarea
+            name="content"
+            value={formData.content}
+            onChange={handleChange}
+            placeholder="Main note"
+            className="w-full h-[calc(100vh-200px)] bg-white text-black p-4 rounded resize-none"
+          />
         </div>
       </div>
-    </div>
-    {/* Rest of the footer code remains unchanged */}
     <footer>
                 <div className="w-full">
                     <div className="bg-[#4AA9AD] px-4 py-2 flex items-center justify-between">
@@ -140,4 +176,4 @@ const DashboardHeader = () => {
   );
 };
 
-export default DashboardHeader;
+export default NotesInterface;

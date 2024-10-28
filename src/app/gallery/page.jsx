@@ -1,9 +1,19 @@
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
 import Header from '../components/Header'
 import Link from 'next/link';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { useGetAllContentQuery } from '../slices/userSlices/userApiSlice';
 
 const Page = () => {
+    const {data: content, refetch} = useGetAllContentQuery()
+   
+    useEffect(() => {
+        if(content) {
+          refetch()
+        }
+    }, [content, refetch])
+    
     return (
         <div className="min-h-screen bg-cover bg-center bg-no-repeat flex flex-col pt-14" style={{ backgroundImage: `url('/vecteezy_blue-vector-grunge-background_107486.jpg')` }}>
             <Header />
@@ -21,34 +31,24 @@ const Page = () => {
                         
                         {/* Image Grid */}
                         <div className="grid grid-cols-3 gap-4 p-4">
-                            <div className="aspect-square w-60 h-60 overflow-hidden">
-                                <img 
-                                    src="/depression-107-5864ce77ddeeb__700.jpg" 
-                                    alt="" 
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="aspect-square w-60 h-60 overflow-hidden">
-                                <img 
-                                    src="/depression-through-art-1.jpg" 
-                                    alt="" 
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="aspect-square w-60 h-60 overflow-hidden">
-                                <img 
-                                    src="/The Lost Love.png" 
-                                    alt="" 
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="aspect-square w-60 h-60 overflow-hidden">
-                                <img 
-                                    src="/brain-sick-ii-prints.jpg" 
-                                    alt="" 
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
+                        {content && content.data.map((cont) => (
+    <div key={cont._id} className="flex flex-col aspect-square w-60 h-60">
+        <div className="relative h-52 overflow-hidden rounded-lg shadow-md group">
+            <img 
+                src={cont.image.url} 
+                alt="" 
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+        </div>
+        <div className="mt-2 text-center">
+            <h3 className="text-white text-sm font-medium bg-[#8BA6A9] py-1 px-3 rounded-full shadow-sm">
+                {cont.room}
+            </h3>
+        </div>
+    </div>
+))}
+                            
                         </div>
                     </div>
                 </div>

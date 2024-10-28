@@ -1,209 +1,204 @@
-'use client'
-import React, { useState, useRef } from 'react';
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
 import Header from '../components/Header';
 import Link from 'next/link';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import { usePostContentMutation, useGetContentQuery } from '../slices/userSlices/userApiSlice';
 
 const DashboardHeader = () => {
-  const [isRoomDropdownOpen, setIsRoomDropdownOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
   const fileInputRef = useRef(null);
+  const [postContent] = usePostContentMutation()
+  const {data: getContent, refetch } = useGetContentQuery()
+
+
+  useEffect(() => {
+    if(getContent) {
+      refetch()
+    }
+  }, [getContent, refetch])
 
   const rooms = [
-    { id: 1, name: 'Depression' },
-    { id: 2, name: 'Anxiety' },
-    { id: 3, name: 'Bipolar' }
+    { id: 1, name: 'Depression', image: '/path/to/depression_image.jpg' },
+    { id: 2, name: 'Anxiety', image: '/path/to/anxiety_image.jpg' },
+    { id: 3, name: 'Bipolar', image: '/path/to/bipolar_image.jpg' },
   ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil((getContent && getContent.data.length) / itemsPerPage);
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
-      // Here you would typically handle the file upload to your server
       console.log('Selected file:', file.name);
+    }
+  };
+
+  const handleRoomSelect = (room) => {
+    setSelectedRoom(room);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedFile) {
+      setErrorMessage('Please select a file');
+      return;
+    }
+
+    if (!selectedRoom) {
+      setErrorMessage('Please select a room');
+      return;
+    }
+
+    setErrorMessage('');
+
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+      formData.append('room', selectedRoom.name);
+
+      const res = await postContent(formData).unwrap()
+      toast.success('Data sent successfully');
+      refetch()
+     
+    } catch (err) {
+      console.error('Error uploading file and room data:', err);
+      toast.error(err?.data?.message);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
   return (
     <>
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat p-8 "
-         style={{ backgroundImage: `url('/vecteezy_blue-vector-grunge-background_107486.jpg')` }}>
-
-            <Header/>
-      <div className="mx-auto max-w-5xl rounded-lg bg-black/80 p-6 mt-10">
-        {/* Header buttons container */}
-        <div className="flex justify-between items-center">
-          {/* Upload Content Button */}
-          <div className="relative">
-            {/* Hidden file input */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              className="hidden"
-              // Add accepted file types as needed
-              accept="image/*,video/*,audio/*"
-            />
-            
-            {/* Upload button that triggers file input */}
-            <button 
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm group"
-              onClick={() => fileInputRef.current.click()}
-            >
-              <span>Upload Content</span>
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-4 w-4 transition-transform group-hover:translate-y-[-2px]" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+      <div
+        className="min-h-screen bg-cover bg-center bg-no-repeat p-8"
+        style={{ backgroundImage: `url('/vecteezy_blue-vector-grunge-background_107486.jpg')` }}
+      >
+        <Header />
+        <div className="mx-auto max-w-5xl rounded-lg bg-black/80 p-6 mt-10">
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              {/* Upload and Choose Room Button Logic */}
+              <div className="relative">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  accept="image/*,video/*,audio/*"
+                  className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm group"
+                  required
                 />
-              </svg>
-            </button>
-
-            {/* Show selected file name if one is selected */}
-            {selectedFile && (
-              <div className="absolute mt-2 px-3 py-1 bg-white rounded-md shadow-sm text-sm">
-                Selected: {selectedFile.name}
               </div>
-            )}
-          </div>
 
-          {/* Choose Room Button with Dropdown */}
-          <div className="relative">
-            <button 
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm"
-              onClick={() => setIsRoomDropdownOpen(!isRoomDropdownOpen)}
-            >
-              Choose A Room
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className={`h-4 w-4 transform transition-transform ${isRoomDropdownOpen ? 'rotate-180' : ''}`} 
-                viewBox="0 0 20 20" 
-                fill="currentColor"
+              {/* Choose Room Dropdown */}
+              <select
+                value={selectedRoom ? selectedRoom.name : ''}
+                onChange={(e) => handleRoomSelect({ name: e.target.value })}
+                className="block appearance-none w-48 bg-[#E5E7EB] border h-10 border-[#E5E7EB] hover:border-gray-500 px-2 py-1 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                required
               >
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
+                <option value="" className="text-red">Select Room</option>
+                {rooms.map((room) => (
+                  <option key={room.id} value={room.name}>
+                    {room.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            {/* Dropdown Menu */}
-            {isRoomDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                <div className="py-1" role="menu" aria-orientation="vertical">
-                  {rooms.map((room) => (
-                    <button
-                      key={room.id}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      onClick={() => {
-                        // Handle room selection here
-                        setIsRoomDropdownOpen(false);
-                      }}
-                    >
-                      {room.name}
-                    </button>
+            {/* Table content area with pagination */}
+            <div className="mt-4 bg-gray-100 rounded-lg w-full h-[500px] p-6 overflow-auto">
+              <table className="w-full text-left bg-white rounded-lg shadow-md">
+                <thead>
+                  <tr className="bg-[#4AA9AD] text-white">
+                    <th className="p-4">Image</th>
+                    <th className="p-4">Room</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {getContent && getContent.data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((room, index) => (
+                    <tr key={index} className="border-b hover:bg-gray-200">
+                      <td className="p-4">
+                        <img src={room.image.url} alt={room.room} className="w-16 h-16 object-cover rounded-md" />
+                      </td>
+                      <td className="p-4 text-gray-800">{room.room}</td>
+                    </tr>
                   ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+                </tbody>
+              </table>
 
-        {/* Main content area - light background */}
-        <div className="mt-4 bg-gray-100 rounded-lg w-full h-[500px]">
-          {/* Add your content here */}
+              {/* Pagination Controls */}
+              <div className="flex justify-center items-center mt-4">
+                <button
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 mx-2 bg-[#4AA9AD] text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <span className="text-gray-700">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 mx-2 bg-[#4AA9AD] text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+
+            {errorMessage && (
+              <div className="mt-2 text-red-500 font-medium">{errorMessage}</div>
+            )}
+            <div className="mt-4 self-end">
+              <button type="submit" className="px-4 py-2 bg-[#4AA9AD] text-white rounded hover:bg-[#3b8b8f]">
+                Submit
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    </div>
-    <footer>
-                <div className="w-full">
-                    {/* Player controls bar */}
-                    <div className="bg-[#4AA9AD] px-4 py-2 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 bg-black rounded-full" />
-                            <div className="text-white">
-                                <div className="text-sm">NF</div>
-                                <div className="text-xs">The Search</div>
-                            </div>
-                        </div>
-                        <div className="flex-1 flex items-center justify-center gap-4">
-                            <div className="h-[2px] bg-black flex-1" />
-                            <button className="text-[#1E90FF]">⟲</button>
-                            <button className="text-[#1E90FF]">◀◀</button>
-                            <button className="h-8 w-8 bg-black rounded-full flex items-center justify-center">
-                                <span className="text-[#1E90FF]">▶</span>
-                            </button>
-                            <button className="text-[#1E90FF]">▶▶</button>
-                            <button className="text-[#1E90FF]">⟳</button>
-                            <div className="h-[2px] bg-black flex-1" />
-                        </div>
-                        <button className="text-[#1E90FF]">🔊</button>
-                    </div>
-
-                    {/* Main content area */}
-                    <div className="bg-[#FFFBA0] p-4">
-                        <div className="relative flex justify-between items-center">
-                            <img
-                                src="/FreshLink Logo OG 1.png"
-                                alt="Hope"
-                                className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-14 mt-6 z-10"
-                            />
-
-                            {/* Left image */}
-                            <div className="border-[15px] border-black bg-white w-[30%]">
-                                <div className="p-2">
-                                    <img src="/Poetherapy (1).png" alt="I will not take me away" className="w-full" />
-                                </div>
-                            </div>
-
-                            {/* Middle image - adjusted to be only slightly smaller */}
-                            <div className="border-[15px] border-black bg-white w-[35%] ">
-                                <div className="p-1">
-                                    <img src="/Lil Wayne (3).png" alt="HEAL" className="w-full h-72 ml-1" />
-                                </div>
-                            </div>
-
-                            {/* Right image */}
-                            <div className="border-[15px] border-black bg-white w-[30%]">
-                                <div className="p-2">
-                                    <img src="/Selena Gomez Quote 1.png" alt="Selena Gomez quote" className="w-full" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-[#4AA9AD] py-8"> 
-          <div className="container mx-auto px-4 flex justify-between items-center">
-    
-            <div className="text-center">
-              <img src="/smile2.png" alt="Smile" className="w-7 h-7 mx-auto" />
-            </div>
-
-            <div className="flex space-x-6">
-              <Link href="https://facebook.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
-                <FaFacebookF size={20} />
-              </Link>
-              <Link href="https://twitter.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
-                <FaTwitter size={20} />
-              </Link>
-              <Link href="https://instagram.com" className="w-6 h-6 rounded-full flex items-center justify-center text-white">
-                <FaInstagram size={20} /> 
-              </Link>
+      <footer>
+        {/* Footer content */}
+        <div className="bg-[#4AA9AD] px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-black rounded-full" />
+            <div className="text-white">
+              <div className="text-sm">NF</div>
+              <div className="text-xs">The Search</div>
             </div>
           </div>
-
-          <div className="text-center text-white text-xs mt-10">
-            © Copyright Year
+          <div className="flex space-x-6">
+            <Link href="https://facebook.com" className="text-white">
+              <FaFacebookF size={20} />
+            </Link>
+            <Link href="https://twitter.com" className="text-white">
+              <FaTwitter size={20} />
+            </Link>
+            <Link href="https://instagram.com" className="text-white">
+              <FaInstagram size={20} />
+            </Link>
           </div>
+          <div className="text-center text-white text-xs mt-10">© Copyright Year</div>
         </div>
-            </footer>
+      </footer>
     </>
   );
 };
