@@ -7,7 +7,7 @@ let socket;
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const ENDPOINT = 'http://localhost:5000';
+  const ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL}`;
   
   // Get username from localStorage or use 'Anonymous'
   const [username] = useState(() => {
