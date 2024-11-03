@@ -22,7 +22,6 @@ const Chat = () => {
   });
 
   useEffect(() => {
-    // Initialize socket connection with proper configuration
     socket = io(ENDPOINT, { 
       withCredentials: true,
       transports: ['websocket'],
@@ -31,12 +30,10 @@ const Chat = () => {
       }
     });
 
-    // Join chat room with username
     socket.emit('joinRoom', username);
 
-    // Cleanup on unmount
     return () => {
-      socket.emit('leaveRoom'); // Changed from 'disconnect' to 'leaveRoom'
+      socket.emit('leaveRoom');
       socket.off();
       socket.disconnect();
     }
